@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<gpx
+   version= "1.0"
+   creator= "http://users.telenet.be/meirenwi/                  E-mail: vermeiren-willy@pandora.be"
+   xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+   xmlns= "http://www.topografix.com/GPX/1/0"
+   xsi:schemaLocation= " http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+   <bounds minlat="51.193115" minlon="4.268188" maxlat="51.471119" maxlon="4.468002"/>
+
+   <wpt lat="51.47111883" lon="4.32312012">
+      <name>START</name>
+   </wpt>
+
+   <trk>
+      <name>Antwerpen, Belgie, Created: Thu Jul 27 2017 09:46:04 GMT+0200 (CEST)</name>
+      <trkseg>
+
+   <trkpt lat="51.47111883" lon="4.32312012">
+      <name>1</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+   <trkpt lat="51.28597042" lon="4.26818848">
+      <name>2</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+   <trkpt lat="51.19311524" lon="4.34234619">
+      <name>3</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+   <trkpt lat="51.19827878" lon="4.43572998">
+      <name>4</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+   <trkpt lat="51.22451782" lon="4.46800232">
+      <name>5</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+   <trkpt lat="51.24085590" lon="4.44122314">
+      <name>6</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+   <trkpt lat="51.24021108" lon="4.40380096">
+      <name>7</name>
+      <sym>Waypoint</sym>
+   </trkpt>
+      </trkseg>
+   </trk>
+</gpx>
