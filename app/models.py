@@ -27,6 +27,7 @@ from nodeodm import status_codes
 from nodeodm.exceptions import ProcessingError, ProcessingTimeout, ProcessingException
 from nodeodm.models import ProcessingNode
 from webodm import settings
+from app import gpxexport as GPX
 
 logger = logging.getLogger('app.logger')
 
@@ -311,6 +312,10 @@ class Task(models.Model):
                     logger.info("Processing... {}".format(self))
 
                     images = [image.path() for image in self.imageupload_set.all()]
+
+                    # Create GPX File
+                    assets_path = self.assets_path()[:-6]
+                    GPX.createFile(images, assets_path)
 
                     # This takes a while
                     uuid = self.processing_node.process_new_task(images, self.name, self.options)
