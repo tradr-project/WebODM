@@ -11,6 +11,7 @@ import '../vendor/leaflet/L.Control.MousePosition.css';
 import '../vendor/leaflet/L.Control.MousePosition';
 import '../vendor/leaflet/Leaflet.Autolayers/css/leaflet.auto-layers.css';
 import '../vendor/leaflet/Leaflet.Autolayers/leaflet-autolayers';
+import '../vendor/leaflet/leaflet-gpx/gpx';
 import $ from 'jquery';
 import ErrorMessage from './ErrorMessage';
 import SwitchModeButton from './SwitchModeButton';
@@ -44,6 +45,9 @@ class Map extends React.Component {
 
     this.imageryLayers = [];
     this.basemaps = {};
+    // -----
+    this.overlays = {};
+    // -----
     this.mapBounds = null;
     this.autolayers = null;
 
@@ -193,19 +197,81 @@ class Map extends React.Component {
       };
     }
 
+    // ---------------------------	  
+    // *** GPX TRAJECTORY PART ***
+    // ---------------------------
+    // gpx file to be shown on the map
+    var gpx = '/api/projects/2/tasks/3/assets/output.gpx';
+    // create a custom-made (leaflet-gpx plugin) layer (extension of featureGroup)
+    var gpxLayer = new L.GPX(gpx,
+	    {async: true,
+	     marker_options: {
+	        startIconUrl: '/static/app/img/pin-icon-start.png',
+	        endIconUrl: '/static/app/img/pin-icon-end.png',
+	        shadowUrl: '/static/app/img/pin-shadow.png',
+		wptIconUrls: {
+		   '': '/static/app/img/pin-icon-wpt.png'
+		}
+	     }
+	    });
+    // add a listener to 'loaded' event
+    gpxLayer.on('loaded', function(e) {
+	    console.log("hallo");
+	    this.map.fitBounds(e.target.getBounds());
+    });
+    // add the layer to the map
+    // gpxLayer.addTo(this.map);
+    this.overlays = { "Trajectory" : gpxLayer };
+    // -------------------------------	  
+    // *** GPX TRAJECTORY PART END ***
+    // -------------------------------
+    
+
+	  
+
+    var options = {
+		collapsed: true,
+		position: 'topright',
+		autoZIndex: true,
+
+		i18n: {
+			toggleButtonLayer:{
+				title: 'Layers',
+				href: '#'
+			},
+			controlLayerList:{
+				baseMaps:{
+					title: "Base Maps",
+					filter:{
+						placeholder: "Filter Base Layer"
+					}
+				},
+				overlays:{
+					title: "Overlays",
+					filter:{
+						placeholder: "Filter Overlay"
+					}
+				},
+				orderLayers:{
+					title: "Selected Overlays Order"
+				}
+			}
+		}
+	};
     this.autolayers = Leaflet.control.autolayers({
-      overlays: {},
-      selectedOverlays: [],
-      baseLayers: this.basemaps
-    }).addTo(this.map);
+       overlays: this.overlays,
+       selectedOverlays: [],
+       baseLayers: this.basemaps
+    }, options).addTo(this.map);
 
     this.map.fitWorld();
 
     Leaflet.control.scale({
-      maxWidth: 250,
+       maxWidth: 250,
     }).addTo(this.map);
     this.map.attributionControl.setPrefix("");
 
+	  
     this.loadImageryLayers(true).then(() => {
         this.map.fitBounds(this.mapBounds);
 
@@ -219,6 +285,9 @@ class Map extends React.Component {
           }
         });
     });
+    
+     
+  
   }
 
   componentDidUpdate(prevProps) {

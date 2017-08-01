@@ -431,7 +431,7 @@ class Task(models.Model):
                             # Remove previous assets directory
                             if os.path.exists(assets_dir):
                                 logger.info("Removing old assets directory: {} for {}".format(assets_dir, self))
-                                shutil.rmtree(assets_dir)
+                           #     shutil.rmtree(assets_dir)
 
                             os.makedirs(assets_dir)
 

@@ -28,8 +28,32 @@ L.Control.AutoLayers = L.Control.extend({
 	options: {
 		collapsed: true,
 		position: 'topright',
-		autoZIndex: true
-	},
+		autoZIndex: true,
+
+		i18n: {
+			toggleButtonLayer:{
+				title: 'Layers',
+				href: '#'
+			},
+			controlLayerList:{
+				baseMaps:{
+					title: "Base Maps",
+					filter:{
+						placeholder: "Filter Base Layer"
+					}
+				},
+				overlays:{
+					title: "Overlays",
+					filter:{
+						placeholder: "Filter Overlay"
+					}
+				},
+				orderLayers:{
+					title: "Selected Overlays Order"
+				}
+			}
+		}
+	},	
 	mapConfig: {},
 	mapLayers: [],
 	overLays: [],
