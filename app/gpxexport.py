@@ -24,10 +24,10 @@ def createFile(images, assets_path):
     filelist.sort()
 
     # create waypoints
-    for filename in filelist:
+    for filename in images:
         if filename.endswith(".JPG") or filename.endswith(".jpg"):
-            path = os.path.join(assets_path, filename)
-            ex = EXIF(open(path, 'rb'))
+            #path = os.path.join(assets_path, filename)
+            ex = EXIF(open(filename, 'rb'))
 
             geo = ex.extract_geo()
             time = ex.extract_capture_time()
