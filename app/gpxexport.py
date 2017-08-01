@@ -1,9 +1,9 @@
 import os
 from app.exiftools import EXIF
-from lxml import etree as ET
+#from lxml import etree as ET
 import datetime
 #import xml.dom.minidom as dom
-#from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ET
 
 '''
 generate GPX-File from exif header
@@ -45,5 +45,5 @@ def createFile(images, assets_path):
 
     tree = ET.ElementTree(root)
     outfile = assets_path + '/output.gpx'
-    tree.write(outfile, pretty_print=True, xml_declaration=True)
+    tree.write(outfile)
 

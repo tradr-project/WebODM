@@ -314,7 +314,11 @@ class Task(models.Model):
                     images = [image.path() for image in self.imageupload_set.all()]
 
                     # Create GPX File
-                    assets_path = self.assets_path()[:-6]
+                    assets_path = self.assets_path()
+
+                    if not os.path.exists(assets_path):
+                        os.makedirs(assets_path)
+
                     GPX.createFile(images, assets_path)
 
                     # This takes a while
