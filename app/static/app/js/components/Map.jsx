@@ -201,7 +201,7 @@ class Map extends React.Component {
     // *** GPX TRAJECTORY PART ***
     // ---------------------------
     // gpx file to be shown on the map
-    var gpx = '/api/projects/2/tasks/3/assets/output.gpx';
+    var gpx = '/api/projects/${task.project}/task/${task.id}/assets/output.gpx';
     // create a custom-made (leaflet-gpx plugin) layer (extension of featureGroup)
     var gpxLayer = new L.GPX(gpx,
 	    {async: true,
