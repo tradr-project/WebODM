@@ -256,6 +256,10 @@ class TaskListItem extends React.Component {
           addActionButton(" View Map", "btn-primary", "fa fa-globe", () => {
             location.href = `/map/project/${task.project}/task/${task.id}/`;
           });
+          addActionButton(" View Reconstruction", "btn-primary", "fa fa-image",  () => {
+          location.href = `/reconstruction/project/${task.project}/task/${task.id}/#file=/api/projects/${task.project}/tasks/${task.id}/assets/opensfm/reconstruction.meshed.json`;
+        });
+
         }else{
           showOrthophotoMissingWarning = true;
         }

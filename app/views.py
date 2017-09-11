@@ -137,3 +137,30 @@ def welcome(request):
                       'title': 'Welcome',
                       'firstuserform': fuf
                   })
+@login_required
+def reconstruction(request, project_pk=None, task_pk=None):
+    title = _("Reconstruction")
+    tiles = []
+
+    if project_pk is not None:
+        project = get_object_or_404(Project, pk=project_pk)
+        if not request.user.has_perm('app.view_project', project):
+            raise Http404()
+        
+        if task_pk is not None:
+            task = get_object_or_404(Task.objects.defer('orthophoto_extent', 'dsm_extent', 'dtm_extent'), pk=task_pk, project=project)
+            title = task.name
+            mapItems = [task.get_map_items()]
+        else:
+            title = project.name
+            mapItems = project.get_map_items()
+
+    return render(request, 'app/reconstruction.html', {
+            'title': title,
+            'params': {
+                'map-items': json.dumps(mapItems),
+                'title': title
+            }.items()
+        })
+
+

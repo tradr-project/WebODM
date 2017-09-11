@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^map/project/(?P<project_pk>[^/.]+)/task/(?P<task_pk>[^/.]+)/$', views.map, name='map'),
     url(r'^map/project/(?P<project_pk>[^/.]+)/$', views.map, name='map'),
     url(r'^3d/project/(?P<project_pk>[^/.]+)/task/(?P<task_pk>[^/.]+)/$', views.model_display, name='model_display'),
-
+    url(r'^reconstruction/project/(?P<project_pk>[^/.]+)/task/(?P<task_pk>[^/.]+)/$', views.reconstruction, name='reconstruction'),
     url(r'^processingnode/([\d]+)/$', views.processing_node, name='processing_node'),
 
     url(r'^api/', include("app.api.urls")),

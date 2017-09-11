@@ -11,6 +11,7 @@ import '../vendor/leaflet/L.Control.MousePosition.css';
 import '../vendor/leaflet/L.Control.MousePosition';
 import '../vendor/leaflet/Leaflet.Autolayers/css/leaflet.auto-layers.css';
 import '../vendor/leaflet/Leaflet.Autolayers/leaflet-autolayers';
+import '../vendor/leaflet/leaflet-gpx/gpx.js';
 import $ from 'jquery';
 import ErrorMessage from './ErrorMessage';
 import SwitchModeButton from './SwitchModeButton';
@@ -58,7 +59,7 @@ class Map extends React.Component {
             const meta = layer[Symbol.for("meta")];
             return meta.project + "_" + meta.task;
           };
-
+    
     // Remove all previous imagery layers
     // and keep track of which ones were selected
     const prevSelectedLayers = [];
@@ -113,6 +114,20 @@ class Map extends React.Component {
             layer.getLatLng = function(){
               return this.options.bounds.getCenter();
             };
+            
+            var gpx = "/api/projects/"+task.project+"/tasks/"+task.id+"/assets/output.gpx";
+            var gpxLayer = new L.GPX(gpx,
+	            {async: true,
+	            marker_options: {
+	                startIconUrl: '/static/app/img/pin-icon-start.png',
+	                endIconUrl: '/static/app/img/pin-icon-end.png',
+	                shadowUrl: '/static/app/img/pin-shadow.png',
+		        wptIconUrls: {
+		            '': '/static/app/img/pin-icon-wpt.png'
+		        }
+	        }
+	        });
+            gpxLayer.addTo(this.map);
 
             var popup = L.DomUtil.create('div', 'infoWindow');
 
@@ -130,6 +145,7 @@ class Map extends React.Component {
                                     }).join("")}
                                 </ul>
 
+                                <div> Test </div>
                                 <button
                                     onclick="location.href='/3d/project/${task.project}/task/${task.id}/';"
                                     type="button"
