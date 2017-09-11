@@ -20,6 +20,7 @@ from nodeodm.exceptions import ProcessingError, ProcessingTimeout, ProcessingExc
 from nodeodm.models import ProcessingNode
 from webodm import settings
 from .project import Project
+from app import gpxexport as GPX
 
 logger = logging.getLogger('app.logger')
 
@@ -70,6 +71,7 @@ class Task(models.Model):
             },
             'dtm.tif': os.path.join('odm_dem', 'dtm.tif'),
             'dsm.tif': os.path.join('odm_dem', 'dsm.tif'),
+            'output.gpx': 'output.gpx',
     }
 
     STATUS_CODES = (
@@ -248,6 +250,23 @@ class Task(models.Model):
 
                     images = [image.path() for image in self.imageupload_set.all()]
 
+                    assets_path = self.assets_path()
+
+                    if not os.path.exists(assets_path + "/images" ):
+                        os.makedirs(assets_path + "/images")
+                    
+                    destination = assets_path + "/images"
+                    
+                    for files in images:
+                        if files.endswith(".jpg") or files.endswith(".JPG"):
+                            shutil.copy(files,destination)
+
+                    GPX.createFile(images, assets_path)
+                    
+                    if not os.path.exists(assets_path):
+                        os.makedirs(assets_path)
+
+
                     # This takes a while
                     uuid = self.processing_node.process_new_task(images, self.name, self.options)
 
@@ -358,9 +377,7 @@ class Task(models.Model):
                             # Remove previous assets directory
                             if os.path.exists(assets_dir):
                                 logger.info("Removing old assets directory: {} for {}".format(assets_dir, self))
-                                shutil.rmtree(assets_dir)
-
-                            os.makedirs(assets_dir)
+                                #shutil.rmtree(assets_dir)
 
                             logger.info("Downloading all.zip for {}".format(self))
 
