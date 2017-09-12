@@ -77,9 +77,8 @@ class Map extends React.Component {
 
       async.each(tiles, (tile, done) => {
         const { url, meta, type } = tile;
-            // no json request for gpx Layer
+            //special layer for gpx
             if (type == 'gpx') {
-                console.log(url)
                 var gpx = url;
                 var layer = new L.GPX(gpx, {
                         async: true,
