@@ -43,6 +43,15 @@ def createFile(images, assets_path):
         else:
             continue
 
+    # Sort trackpoints by capture date
+    data = []
+    for elem in trkSeg:
+        key = elem.findtext("time")
+        data.append((key, elem))
+    
+    data.sort()
+    trkSeg[:] = [item[-1] for item in data]
+
     tree = ET.ElementTree(root)
     outfile = assets_path + '/output.gpx'
     tree.write(outfile)
