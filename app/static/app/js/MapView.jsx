@@ -13,7 +13,7 @@ class MapView extends React.Component {
 
   static propTypes = {
       mapItems: PropTypes.array.isRequired, // list of dictionaries where each dict is a {mapType: 'orthophoto', url: <tiles.json>},
-      selectedMapType: PropTypes.oneOf(['orthophoto', 'dsm', 'dtm']),
+      selectedMapType: PropTypes.oneOf(['orthophoto', 'dsm', 'dtm', 'gpx']),
       title: PropTypes.string,
   };
 
@@ -40,6 +40,7 @@ class MapView extends React.Component {
       mapItem.tiles.forEach(tile => {
         if (tile.type === type) tiles.push({
           url: tile.url,
+          type: tile.type,
           meta: mapItem.meta
         });
       });
@@ -77,7 +78,12 @@ class MapView extends React.Component {
       {
         label: "Terrain Model",
         type: "dtm"
+      },
+      {
+        label: "GPX Track",
+        type: "gpx"
       }
+
     ].filter(mapType => this.getTilesByMapType(mapType.type).length > 0 );
 
     // If we have only one button, hide it...

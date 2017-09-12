@@ -33,7 +33,7 @@ class Map extends React.Component {
     showBackground: PropTypes.bool,
     tiles: PropTypes.array.isRequired,
     opacity: PropTypes.number,
-    mapType: PropTypes.oneOf(['orthophoto', 'dsm', 'dtm'])
+    mapType: PropTypes.oneOf(['orthophoto', 'dsm', 'dtm', 'gpx'])
   };
 
   constructor(props) {
@@ -76,8 +76,35 @@ class Map extends React.Component {
       this.tileJsonRequests = [];
 
       async.each(tiles, (tile, done) => {
-        const { url, meta } = tile;
+        const { url, meta, type } = tile;
+            // no json request for gpx Layer
+            if (type == 'gpx') {
+                console.log(url)
+                var gpx = url;
+                var layer = new L.GPX(gpx, {
+                        async: true,
+	                    marker_options: {
+	                        startIconUrl: '/static/app/img/pin-icon-start.png',
+	                        endIconUrl: '/static/app/img/pin-icon-end.png',
+	                        shadowUrl: '/static/app/img/pin-shadow.png',
+		                wptIconUrls: {
+		                    '': '/static/app/img/pin-icon-wpt.png'
+		                }
+	                }
+	            });
+            this.imageryLayers.push(layer);
+            
+            // Associate metadata with this layer
+            meta.type= "gpx";
+            layer[Symbol.for("meta")] = meta;
 
+            if (forceAddLayers || prevSelectedLayers.indexOf(layerId(layer)) !== -1){
+              layer.addTo(this.map);
+            }
+            // Add layer to layers control
+            this.autolayers.addOverlay(layer, meta.name);
+
+        } else {
         this.tileJsonRequests.push($.getJSON(url)
           .done(info => {
             const bounds = Leaflet.latLngBounds(
@@ -115,20 +142,6 @@ class Map extends React.Component {
               return this.options.bounds.getCenter();
             };
             
-            var gpx = "/api/projects/"+task.project+"/tasks/"+task.id+"/assets/output.gpx";
-            var gpxLayer = new L.GPX(gpx,
-	            {async: true,
-	            marker_options: {
-	                startIconUrl: '/static/app/img/pin-icon-start.png',
-	                endIconUrl: '/static/app/img/pin-icon-end.png',
-	                shadowUrl: '/static/app/img/pin-shadow.png',
-		        wptIconUrls: {
-		            '': '/static/app/img/pin-icon-wpt.png'
-		        }
-	        }
-	        });
-            gpxLayer.addTo(this.map);
-
             var popup = L.DomUtil.create('div', 'infoWindow');
 
             popup.innerHTML = `<div class="title">
@@ -172,6 +185,7 @@ class Map extends React.Component {
           })
           .fail((_, __, err) => done(err))
         );
+      }
       }, err => {
         if (err){
           this.setState({error: err.message || JSON.stringify(err)});
@@ -253,7 +267,9 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     this.imageryLayers.forEach(imageryLayer => {
-      imageryLayer.setOpacity(this.props.opacity / 100);
+        if (imageryLayer[Symbol.for("meta")].type != "gpx") {
+            imageryLayer.setOpacity(this.props.opacity / 100);
+        }
     });
 
     if (prevProps.tiles !== this.props.tiles){
