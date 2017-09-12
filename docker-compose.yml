@@ -15,7 +15,7 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
   webapp:
-    image: internal/webodm_webapp
+    image: tradr/webodm_webapp
     container_name: webapp
     entrypoint: /bin/bash -c "chmod +x /webodm/*.sh && /bin/bash -c \"/webodm/wait-for-it.sh db:5432 -- /webodm/start.sh\""
     volumes:

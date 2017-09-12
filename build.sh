@@ -1,1 +1,2 @@
-docker build -t internal/webodm_webapp .
+docker build -t tradr/webodm_webapp .
+docker push tradr/webodm_webapp
