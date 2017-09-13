@@ -8,14 +8,6 @@ ENV PYTHONPATH $PYTHONPATH:/webodm
 RUN mkdir /webodm
 WORKDIR /webodm
 
-# Install pip reqs
-ADD requirements.txt /webodm/
-RUN pip install -r requirements.txt
-
-ADD . /webodm/
-
-RUN git submodule update --init
-
 # Install Node.js
 RUN curl --silent --location https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get install -y nodejs
@@ -28,6 +20,15 @@ RUN printf "deb     http://mirror.steadfast.net/debian/    testing main contrib 
 
 # Install GDAL, nginx
 RUN apt-get update && apt-get install -t testing -y binutils libproj-dev gdal-bin nginx
+
+# Install pip reqs
+ADD requirements.txt /webodm/
+RUN pip install -r requirements.txt
+
+
+ADD . /webodm/
+
+RUN git submodule update --init
 
 WORKDIR /webodm/nodeodm/external/node-OpenDroneMap
 RUN npm install
