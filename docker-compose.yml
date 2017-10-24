@@ -2,8 +2,6 @@
 # Which makes for faster setup times
 version: '2'
 volumes:
-  dbdata:
-    driver: local
   appmedia:
     driver: local
 services:
@@ -13,13 +11,13 @@ services:
     ports:
       - "5432"
     volumes:
-      - dbdata:/var/lib/postgresql/data
+      - "${MISSION_PATH}/db:/var/lib/postgresql/data"
   webapp:
     image: tradr/webodm_webapp
     container_name: tradr-odm_webapp
     entrypoint: /bin/bash -c "chmod +x /webodm/*.sh && /bin/bash -c \"/webodm/wait-for-it.sh db:5432 -- /webodm/start.sh\""
     volumes:
-      - appmedia:/webodm/app/media
+      - "${MISSION_PATH}/appmedia:/webodm/app/media"
     ports:
       - "8000:8000"
     depends_on:
