@@ -30,6 +30,9 @@ def createFile(images, assets_path):
             ex = EXIF(open(filename, 'rb'))
 
             geo = ex.extract_geo()
+            if not geo:
+                continue
+
             time = ex.extract_capture_time()
             timeUTC = datetime.datetime.fromtimestamp(
             int(time)

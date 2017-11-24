@@ -22,4 +22,11 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - node-odm-1
     restart: on-failure:10
+  node-odm-1:
+    image: tradr/node-opendronemap
+    container_name: node-odm-1
+    ports:
+      - "3000"
+
